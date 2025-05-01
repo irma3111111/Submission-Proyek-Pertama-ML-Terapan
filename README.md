@@ -104,7 +104,7 @@ Setelah evaluasi dan tuning, **Random Forest** dipilih sebagai model terbaik kar
 
 ---
 
-Dokumen ini mencerminkan seluruh tahapan proyek machine learning dari pemahaman bisnis hingga evaluasi model berdasarkan notebook implementasi aktual.
+Dokumen ini mencerminkan seluruh tahapan proyek machine learning dari pemahaman bisnis hingga evaluasi model.
 
 Untuk tahap lanjutan, model dapat diintegrasikan ke dalam sistem scoring kredit internal perusahaan fintech, baik dalam bentuk aplikasi web atau sistem backend otomatis.
 
