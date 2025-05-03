@@ -36,13 +36,48 @@ Menurut [World Bank, 2021], adopsi AI dan data science dalam fintech mampu mengu
 
 Dataset yang digunakan adalah [Loan Default Dataset](https://www.kaggle.com/datasets/yasserh/loan-default-dataset) yang berisi 148.670 entri pinjaman. Masing-masing entri memiliki atribut terkait informasi peminjam, pinjaman, properti, serta status default.
 
-### Contoh Variabel:
-- `loan_amount`: jumlah pinjaman
-- `rate_of_interest`: tingkat bunga pinjaman
-- `Credit_Score`: skor kredit peminjam
-- `LTV`: Loan to Value ratio
-- `age`: usia peminjam (dalam rentang umur)
-- `Status`: target (0 = tidak default, 1 = default)
+### 📊 Jumlah Kolom Data
+- Jumlah kolom: 34
+- Jumlah baris: 148.670
+
+### Fitur pada dataset
+| Fitur                       | Tipe Data | Deskripsi Singkat                                         |
+| --------------------------- | --------- | --------------------------------------------------------- |
+| `ID`                        | Kategorik | Nomor identifikasi unik pinjaman                          |
+| `year`                      | Numerik   | Tahun pengajuan pinjaman (selalu 2019)                    |
+| `loan_limit`                | Kategorik | Jenis batas pinjaman (misal: conforming / non-conforming) |
+| `Gender`                    | Kategorik | Jenis kelamin pemohon                                     |
+| `approv_in_adv`             | Kategorik | Status persetujuan sebelumnya (pre-approval)              |
+| `loan_type`                 | Kategorik | Tipe pinjaman (misal: type1, type2, type3)                |
+| `loan_purpose`              | Kategorik | Tujuan pinjaman (misal: pembelian rumah, refinance)       |
+| `Credit_Worthiness`         | Kategorik | Kelayakan kredit (l1, l2)                                 |
+| `open_credit`               | Kategorik | Status kredit terbuka (ada/tidak)                         |
+| `business_or_commercial`    | Kategorik | Apakah pinjaman untuk bisnis/komersial                    |
+| `loan_amount`               | Numerik   | Jumlah total pinjaman                                     |
+| `rate_of_interest`          | Numerik   | Suku bunga pinjaman                                       |
+| `Interest_rate_spread`      | Numerik   | Selisih suku bunga terhadap standar                       |
+| `Upfront_charges`           | Numerik   | Biaya yang dibayar di awal                                |
+| `term`                      | Numerik   | Lama tenor pinjaman (dalam bulan)                         |
+| `Neg_ammortization`         | Kategorik | Apakah terdapat amortisasi negatif                        |
+| `interest_only`             | Kategorik | Apakah hanya membayar bunga                               |
+| `lump_sum_payment`          | Kategorik | Apakah terdapat pembayaran sekaligus                      |
+| `property_value`            | Numerik   | Nilai properti yang dibiayai                              |
+| `construction_type`         | Kategorik | Jenis konstruksi properti                                 |
+| `occupancy_type`            | Kategorik | Status hunian (pribadi/sewa)                              |
+| `Secured_by`                | Kategorik | Jenis jaminan (contoh: rumah)                             |
+| `total_units`               | Numerik   | Jumlah unit properti yang dibiayai                        |
+| `income`                    | Numerik   | Pendapatan tahunan pemohon                                |
+| `credit_type`               | Kategorik | Jenis institusi kredit utama (misal: CIB, EXP)            |
+| `Credit_Score`              | Numerik   | Skor kredit (skala 500–900)                               |
+| `co-applicant_credit_type`  | Kategorik | Jenis institusi kredit untuk co-applicant                 |
+| `age`                       | Kategorik | Kelompok usia pemohon (misal: 25-34, 35-44)               |
+| `submission_of_application` | Kategorik | Cara pengajuan (via institusi/perorangan)                 |
+| `LTV`                       | Numerik   | Loan to Value ratio (pinjaman terhadap nilai properti)    |
+| `Region`                    | Kategorik | Wilayah geografis (North, South, East, West)              |
+| `Security_Type`             | Kategorik | Jenis jaminan pinjaman (direct/indirect)                  |
+| `Status`                    | Numerik   | Target: Status default (0 = tidak default, 1 = default)   |
+| `dtir1`                     | Numerik   | Debt-to-Income Ratio (rasio cicilan terhadap penghasilan) |
+
 
 ### EDA Singkat:
 - Fitur `Status` sangat imbalanced (sekitar 75% = tidak default, 25% = default)
