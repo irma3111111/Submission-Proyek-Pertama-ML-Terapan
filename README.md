@@ -157,18 +157,19 @@ Beberapa fitur menunjukkan korelasi sangat rendah atau hampir nol dengan fitur l
 Pada tahap ini dilakukan serangkaian langkah untuk mempersiapkan data sebelum digunakan dalam pelatihan model machine learning. Tahapan ini penting untuk memastikan model bekerja secara optimal dan adil dalam proses prediksi.
 
 ### 1. Train-Test Split
-Dataset dibagi menjadi data latih dan data uji menggunakan fungsi train_test_split dengan rasio 80:20:
-Tujuan: Memastikan evaluasi model dilakukan terhadap data yang belum pernah dilihat sebelumnya, sehingga hasil evaluasi lebih objektif dan realistis.
+- Dataset dibagi menjadi data latih dan data uji menggunakan fungsi train_test_split dengan rasio 80:20:
+- Tujuan: Memastikan evaluasi model dilakukan terhadap data yang belum pernah dilihat sebelumnya, sehingga hasil evaluasi lebih objektif dan realistis.
 
 ### 2. Data Preprocessing
 Data preprocessing dilakukan dengan membedakan perlakuan pada fitur numerik dan kategorikal menggunakan ColumnTransformer.
-📐 Fitur numerik: Dinormalisasi menggunakan StandardScaler agar berada pada skala yang sama.
-🧾 Fitur kategorikal: Dikodekan dengan OrdinalEncoder untuk mengubah kategori menjadi nilai numerik.
+- 📐 Fitur numerik: Dinormalisasi menggunakan StandardScaler agar berada pada skala yang sama.
+- 🧾 Fitur kategorikal: Dikodekan dengan OrdinalEncoder untuk mengubah kategori menjadi nilai numerik.
+
 Tujuan: Menyediakan data dalam format numerik dan berskala seragam agar dapat diproses dengan baik oleh model.
 
 ### 3. Handling Imbalanced Classes
-Masalah ketidakseimbangan kelas pada target Status diatasi menggunakan SMOTE (Synthetic Minority Oversampling Technique)
-Tujuan: Menyeimbangkan distribusi kelas target agar model tidak bias terhadap kelas mayoritas dan meningkatkan akurasi pada kelas minoritas.
+- Masalah ketidakseimbangan kelas pada target Status diatasi menggunakan SMOTE (Synthetic Minority Oversampling Technique)
+- Tujuan: Menyeimbangkan distribusi kelas target agar model tidak bias terhadap kelas mayoritas dan meningkatkan akurasi pada kelas minoritas.
 
 
 ## Modelling
@@ -244,6 +245,22 @@ Beberapa metrik evaluasi yang digunakan:
 | **ROC-AUC Score**            | Luas area di bawah kurva ROC, menggambarkan trade-off antara TPR dan FPR.                                                                        |
 | **MSE (Mean Squared Error)** | Rata-rata kuadrat selisih antara nilai prediksi dan aktual. Umumnya untuk regresi, namun digunakan di sini sebagai tambahan perspektif evaluasi. |
 | **Confusion Matrix**         | Matriks yang menunjukkan TP, FP, FN, dan TN dari model prediksi.                                                                                 |
+
+### 📐 Evaluasi Model: Mean Squared Error (MSE)
+Mean Squared Error (MSE) adalah salah satu metrik evaluasi yang digunakan untuk mengukur rata-rata kuadrat selisih antara nilai prediksi dan nilai aktual. 
+
+Formula MSE adalah:
+
+![image](https://github.com/user-attachments/assets/f5559ee6-1662-410f-9b3d-0cc8d29d9544)
+
+Mengapa MSE Digunakan dalam Proyek Ini:
+
+- Meskipun MSE umum digunakan untuk regresi, pada kasus ini metrik ini digunakan sebagai indikator tambahan untuk mengevaluasi performa model klasifikasi dalam hal seberapa jauh prediksi biner model dari nilai aktual dalam bentuk kuadrat.
+- Nilai MSE yang lebih kecil menunjukkan bahwa prediksi model lebih akurat terhadap nilai sebenarnya.
+
+Interpretasi Hasil:
+- Pada model Random Forest, MSE sangat kecil (mendekati 0), yang menandakan bahwa model menghasilkan prediksi yang hampir sepenuhnya akurat.
+- Pada model Logistic Regression, MSE lebih besar, menandakan bahwa terdapat lebih banyak kesalahan dalam prediksi dibandingkan Random Forest.
 
 ### ✅ Random Forest - Hasil Evaluasi
 - MSE: 0.000033
