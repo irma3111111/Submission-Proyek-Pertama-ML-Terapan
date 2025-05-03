@@ -39,6 +39,19 @@ Dataset yang digunakan adalah [Loan Default Dataset](https://www.kaggle.com/data
 ### 📊 Jumlah Kolom Data
 - Jumlah kolom: 34
 - Jumlah baris: 148.670
+### ⚠️ Kondisi Data
+### Missing Values (Nilai Hilang)
+- Ditemukan missing values pada beberapa fitur seperti LTV dan dtir1.
+
+### Duplikat
+- Tidak ditemukan baris duplikat dalam dataset.
+
+### Outlier
+Beberapa kolom numerik menunjukkan nilai ekstrem (outlier) yang tidak wajar:
+- loan_amount: maksimum > 3,5 juta (rata-rata sekitar 331 ribu)
+- LTV: maksimum hingga 7831.25, padahal rasio normal < 100
+- income, property_value, dan dtir1: nilai tinggi ekstrem yang mencurigakan
+Outlier ini perlu ditangani sebelum membangun model, baik dengan transformasi, imputasi, atau pembersihan.
 
 ### Fitur pada dataset
 | Fitur                       | Tipe Data | Deskripsi Singkat                                         |
@@ -80,11 +93,45 @@ Dataset yang digunakan adalah [Loan Default Dataset](https://www.kaggle.com/data
 
 
 ### EDA Singkat:
-- Fitur `Status` sangat imbalanced (sekitar 75% = tidak default, 25% = default)
-- Korelasi tinggi ditemukan antara `rate_of_interest` dan `Interest_rate_spread`
-- Distribusi fitur numerik dan kategorikal divisualisasikan dengan histogram, boxplot, dan bar chart
-- Korelasi antar fitur numerik divisualisasikan dengan heatmap
+### 📌 Kondisi Data:
+- Dataset terdiri dari 33 kolom dan sekitar 148.670 baris.
+- Ditemukan missing values pada beberapa fitur seperti LTV dan dtir1.
+- Tidak ditemukan duplikat data (df.duplicated().sum() menghasilkan 0).
+- Beberapa fitur memiliki nilai tunggal (seperti year hanya 2019), sehingga tidak informatif.
 
+### 🎯 Distribusi Target (Status)
+Visualisasi menunjukkan distribusi kelas target sangat tidak seimbang:
+- Mayoritas berstatus tidak default (Status = 0)
+- Minoritas berstatus default (Status = 1)
+  
+![image](https://github.com/user-attachments/assets/db5ee260-89bb-4d6f-ba38-fc5423a1bd49)
+
+📌 Insight: Model prediksi harus mempertimbangkan ketidakseimbangan ini, misalnya dengan SMOTE (oversampling) atau metode balancing lainnya agar tidak bias ke kelas mayoritas.
+
+### 📈 Distribusi Fitur Numerik
+Dilakukan visualisasi histogram untuk semua fitur numerik seperti:
+- loan_amount, Credit_Score, income, LTV, Upfront_charges, dtir1, dll.
+
+![image](https://github.com/user-attachments/assets/e7b4777f-2c01-49ef-92ff-fc92d934d217)
+
+![image](https://github.com/user-attachments/assets/c007d2cf-cf03-44f2-b070-c607fa61a69a)
+
+![image](https://github.com/user-attachments/assets/364abb5d-0f08-4c80-a1ce-38a3ea17951f)
+
+![image](https://github.com/user-attachments/assets/88c78521-f412-4aa4-bc99-a5ca324db89d)
+
+![image](https://github.com/user-attachments/assets/f0d55cd6-7801-4acf-a34b-1384f843d08a)
+
+![image](https://github.com/user-attachments/assets/058323de-28e9-4f3d-8e98-a23f82475630)
+  
+📌 Temuan Penting:
+- Beberapa fitur seperti LTV dan loan_amount memiliki distribusi miring kanan (positively skewed), menunjukkan adanya outlier.
+- Credit_Score cenderung normal, tetapi lebih banyak terkonsentrasi di rentang 600–750.
+- income menunjukkan nilai ekstrem — perlu normalisasi atau transformasi.
+- dtir1 sebagian besar berada antara 20–50, yang masuk akal, namun ada outlier juga.
+
+
+  
 ## Data Preparation
 
 Langkah-langkah preprocessing yang dilakukan:
