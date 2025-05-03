@@ -14,20 +14,23 @@ Menurut [World Bank, 2021], adopsi AI dan data science dalam fintech mampu mengu
 
 ## Business Understanding
 
-### Problem Statements
-- Bagaimana cara memprediksi apakah seorang peminjam akan mengalami gagal bayar atau tidak?
-- Fitur-fitur apa saja yang paling berpengaruh terhadap risiko gagal bayar?
-- Bagaimana menangani ketidakseimbangan data antara peminjam yang default dan tidak default?
+### Problem Statements:
 
-### Goals
-- Mengklasifikasikan peminjam menjadi "default" dan "tidak default" secara akurat.
-- Mengidentifikasi fitur penting dalam data historis pinjaman yang memengaruhi kemungkinan default.
-- Mengembangkan model yang dapat diandalkan dan generalizable.
+- Bagaimana mengidentifikasi calon peminjam yang berpotensi mengalami gagal bayar?
+- Apa saja fitur atau karakteristik yang paling berpengaruh terhadap kemungkinan gagal bayar?
+- Bagaimana cara membandingkan dan mengevaluasi model-model prediksi untuk memilih yang paling optimal dalam deteksi pinjaman berisiko?
 
-### Solution Statements
-- Membangun dua model klasifikasi: **Random Forest** dan **Logistic Regression** untuk membandingkan performa.
-- Menggunakan **SMOTE** untuk mengatasi ketidakseimbangan kelas.
-- Meningkatkan model terbaik menggunakan **GridSearchCV** untuk tuning hyperparameter.
+### Goals:
+
+- Mengembangkan model klasifikasi yang dapat memprediksi status pinjaman (default atau tidak).
+- Mengidentifikasi fitur penting yang berpengaruh terhadap status default.
+- Melakukan perbandingan dan evaluasi model untuk memilih model dengan performa prediksi terbaik.
+
+### Solution Statements:
+
+- Melatih dua algoritma berbeda (Random Forest dan Logistic Regression) untuk memprediksi status default.
+- Melakukan analisis fitur penting yang mempengaruhi status default melalui feature importance dan interpretasi koefisien model.
+- Membandingkan performa kedua model berdasarkan metrik akurasi, precision, recall, F1-score dan AUC, serta melakukan hyperparameter tuning pada model terbaik untuk meningkatkan akurasi prediksi.
 
 ## Data Understanding
 
