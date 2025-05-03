@@ -34,8 +34,7 @@ Menurut [World Bank, 2021], adopsi AI dan data science dalam fintech mampu mengu
 
 ## Data Understanding
 
-Dataset yang digunakan adalah [Loan Default Dataset](https://www.kaggle.com/datasets/yasserh/loan-default-dataset) yang berisi 148.670 entri pinjaman. Masing-masing entri memiliki atribut terkait informasi peminjam, pinjaman, properti, serta status default.
-
+Dataset yang digunakan adalah [Loan Default Dataset](https://www.kaggle.com/datasets/yasserh/loan-default-dataset) yang berisi:
 ### 📊 Jumlah Kolom Data
 - Jumlah kolom: 34
 - Jumlah baris: 148.670
@@ -130,63 +129,201 @@ Dilakukan visualisasi histogram untuk semua fitur numerik seperti:
 - income menunjukkan nilai ekstrem — perlu normalisasi atau transformasi.
 - dtir1 sebagian besar berada antara 20–50, yang masuk akal, namun ada outlier juga.
 
+### heatmap korelasi fitur numerik
+
+![image](https://github.com/user-attachments/assets/3b51618d-2152-454a-9e97-64dcab7d3cf6)
+
+### 📌 Insight dari Heatmap Korelasi:
+1. Korelasi Tinggi antar Fitur
+loan_amount memiliki korelasi tinggi dengan:
+- property_value (0.69) → logis, karena pinjaman biasanya proporsional terhadap nilai properti.
+- income (0.44) → semakin tinggi penghasilan, semakin besar kemungkinan pinjaman yang diajukan.
+- rate_of_interest dan Interest_rate_spread memiliki korelasi sangat tinggi (0.62):
+Ini menunjukkan bahwa keduanya redundan dan bisa dipertimbangkan untuk memilih salah satu saja dalam model.
+
+2. Korelasi Negatif Signifikan
+- income vs dtir1: korelasi negatif sedang (-0.25) → masuk akal, karena semakin tinggi pendapatan, semakin rendah rasio utang terhadap pendapatan.
+- property_value vs LTV: korelasi negatif (-0.22) → LTV (Loan-to-Value) menurun saat nilai properti meningkat
+  
+3. Fitur yang Tidak Berkorelasi
+Beberapa fitur menunjukkan korelasi sangat rendah atau hampir nol dengan fitur lainnya, misalnya:
+- Credit_Score terhadap hampir semua fitur.
+- year terhadap semua fitur (seperti yang juga terlihat sebelumnya, semua data berasal dari tahun 2019).
 
   
 ## Data Preparation
 
-Langkah-langkah preprocessing yang dilakukan:
-- **Imputasi missing value**: Median untuk numerik, modus untuk kategorikal
-- **Standardisasi**: Menggunakan `StandardScaler` untuk fitur numerik
-- **Encoding**: Menggunakan `OrdinalEncoder` untuk fitur kategorikal
-- **SMOTE**: Oversampling data default untuk mengatasi imbalance
 
-Semua tahap di atas dilakukan dengan bantuan `Pipeline` dan `ColumnTransformer` untuk memastikan proses terstandarisasi dan efisien.
+Pada tahap ini dilakukan serangkaian langkah untuk mempersiapkan data sebelum digunakan dalam pelatihan model machine learning. Tahapan ini penting untuk memastikan model bekerja secara optimal dan adil dalam proses prediksi.
 
-## Modeling
+### 1. Train-Test Split
+Dataset dibagi menjadi data latih dan data uji menggunakan fungsi train_test_split dengan rasio 80:20:
+Tujuan: Memastikan evaluasi model dilakukan terhadap data yang belum pernah dilihat sebelumnya, sehingga hasil evaluasi lebih objektif dan realistis.
 
-Dua model utama digunakan:
+### 2. Data Preprocessing
+Data preprocessing dilakukan dengan membedakan perlakuan pada fitur numerik dan kategorikal menggunakan ColumnTransformer.
+📐 Fitur numerik: Dinormalisasi menggunakan StandardScaler agar berada pada skala yang sama.
+🧾 Fitur kategorikal: Dikodekan dengan OrdinalEncoder untuk mengubah kategori menjadi nilai numerik.
+Tujuan: Menyediakan data dalam format numerik dan berskala seragam agar dapat diproses dengan baik oleh model.
 
-### 1. Logistic Regression
-- Digunakan sebagai baseline model
-- Model linier yang sederhana dan cepat, baik untuk interpretasi awal
+### 3. Handling Imbalanced Classes
+Masalah ketidakseimbangan kelas pada target Status diatasi menggunakan SMOTE (Synthetic Minority Oversampling Technique)
+Tujuan: Menyeimbangkan distribusi kelas target agar model tidak bias terhadap kelas mayoritas dan meningkatkan akurasi pada kelas minoritas.
 
-### 2. Random Forest
-- Model non-linier dan ensemble yang kuat
-- Cocok untuk menangani banyak fitur dan interaksi kompleks
 
-### Parameter tuning:
-- `n_estimators`: [100, 200]
-- `max_depth`: [None, 10, 20]
-- `min_samples_split`: [2, 5]
+## Modelling
 
-### Pipeline
-Kedua model diintegrasikan ke dalam pipeline lengkap bersama preprocessing dan SMOTE.
+Tahap ini berfokus pada pembangunan dan pelatihan model machine learning untuk menyelesaikan permasalahan klasifikasi status persetujuan pinjaman. Proses dilakukan melalui beberapa tahap terstruktur:
 
-### Model Terbaik
-Setelah evaluasi dan tuning, **Random Forest** dipilih sebagai model terbaik karena hasil metrik yang unggul secara keseluruhan.
+### Tahapan Pemodelan
+- Preprocessing Data
+> Numerik: Standarisasi menggunakan StandardScaler
+
+> Kategorikal: Encoding dengan OrdinalEncoder
+
+> Semua preprocessing dibungkus dalam ColumnTransformer
+
+- Penanganan Kelas Tidak Seimbang
+> Menggunakan SMOTE (Synthetic Minority Oversampling Technique) untuk memperbaiki distribusi kelas target yang tidak seimbang
+
+- Model Training
+> Dua model dilatih:
+
+> RandomForestClassifier
+
+> LogisticRegression
+
+- Pipeline Machine Learning
+> Pipeline dibangun dengan tahapan:
+
+> Preprocessing → SMOTE → Model
+
+### Random Forest Classifier
+Algoritma ensemble yang membangun banyak pohon keputusan dan menggabungkannya melalui voting mayoritas untuk klasifikasi. Efektif menangani dataset besar dan kompleks.
+
+⚙️ Parameter Awal
+- random_state=42: Menjamin hasil reproducible
+
+🔍 Kelebihan
+- Mampu menangani fitur numerik dan kategorikal
+- Tahan terhadap overfitting
+- Menyediakan fitur feature_importance
+
+⚠️ Kekurangan
+- Kurang interpretatif
+- Training time lebih lama dibanding model sederhana
+
+### Logistic Regression
+Model klasifikasi linear yang digunakan sebagai baseline. Mengestimasi probabilitas suatu kelas berdasarkan kombinasi linier fitur input.
+
+⚙️ Parameter Awal
+- max_iter=1000: Memastikan model mencapai konvergensi
+- random_state=42: Konsistensi hasil
+
+🔍 Kelebihan
+- Sederhana dan cepat
+- Interpretasi model mudah (koefisien dapat dibaca)
+- Baik untuk hubungan linier
+
+⚠️ Kekurangan
+- Performa menurun untuk data non-linear
+- Sensitif terhadap multikolinearitas
 
 ## Evaluation
 
-### Metrik Evaluasi
-- **Akurasi**: Persentase prediksi yang benar
-- **Precision**: Kemampuan model dalam memprediksi default dengan benar
-- **Recall**: Kemampuan model menangkap semua kasus default
-- **F1 Score**: Rata-rata harmonis dari precision dan recall
-- **ROC-AUC**: Area under curve dari ROC
+Tahapan evaluasi bertujuan untuk menilai performa model machine learning yang telah dibangun menggunakan metrik-metrik evaluasi yang sesuai dengan konteks klasifikasi pada data peminjaman.
 
-### Hasil Evaluasi
-| Model              | Accuracy | Precision | Recall | F1 Score | ROC AUC |
-|-------------------|----------|-----------|--------|----------|---------|
-| Logistic Regression | 78%      | 63%       | 25%    | 35%      | 0.73    |
-| Random Forest       | 100%     | 100%      | 100%   | 100%     | 1.00    |
+### 🎯 Evaluation Metrics
+Beberapa metrik evaluasi yang digunakan:
+| Metrik                       | Penjelasan                                                                                                                                       |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Accuracy**                 | Proporsi prediksi yang benar dibandingkan total prediksi. Cocok jika kelas seimbang, tapi kurang informatif pada data imbalance.                 |
+| **Precision**                | Kemampuan model memprediksi kelas positif secara akurat (TP / (TP + FP))                                                                         |
+| **Recall**                   | Kemampuan model menangkap semua kasus positif (TP / (TP + FN))                                                                                   |
+| **F1-Score**                 | Harmonic mean dari precision dan recall. Cocok untuk data tidak seimbang.                                                                        |
+| **ROC-AUC Score**            | Luas area di bawah kurva ROC, menggambarkan trade-off antara TPR dan FPR.                                                                        |
+| **MSE (Mean Squared Error)** | Rata-rata kuadrat selisih antara nilai prediksi dan aktual. Umumnya untuk regresi, namun digunakan di sini sebagai tambahan perspektif evaluasi. |
+| **Confusion Matrix**         | Matriks yang menunjukkan TP, FP, FN, dan TN dari model prediksi.                                                                                 |
 
-> *Catatan:* Nilai 100% pada Random Forest disebabkan oleh penggunaan SMOTE yang membuat kelas seimbang. Model tetap divalidasi silang untuk memastikan generalisasi.
+### ✅ Random Forest - Hasil Evaluasi
+- MSE: 0.000033
+- Accuracy: 100%
+- Classification Report:
+> Precision: 1.00
+> Recall: 1.00
+> F1-Score: 1.00
+- ROC-AUC: ~1.00
+- Confusion Matrix:
 
-### Tambahan Visualisasi:
-- ROC Curve dibandingkan antar model
-- Confusion Matrix untuk masing-masing model
-- Feature Importance dari model Random Forest menunjukkan fitur paling berpengaruh seperti `Credit_Score`, `LTV`, dan `loan_amount`
+  ![image](https://github.com/user-attachments/assets/a0f0d47a-d542-4694-b156-babbd11df29c)
 
+> Interpretasi: Model sangat kuat dan mampu menangkap hampir seluruh pola dengan akurasi sempurna. Namun perlu diperhatikan kemungkinan overfitting yang tersembunyi.
+
+### 🧮 Logistic Regression - Hasil Evaluasi
+- MSE: 0.3021
+- Accuracy: 70%
+- Classification Report:
+> Precision: 0.87 (kelas 0), 0.42 (kelas 1)
+
+> Recall: 0.70 (kelas 0), 0.68 (kelas 1)
+
+>F1-Score: 0.78 (kelas 0), 0.52 (kelas 1)
+- ROC-AUC: ~0.70
+- Confusion Matrix:
+
+![image](https://github.com/user-attachments/assets/69f4fbfd-91e1-48c8-999c-f689bd13818b)
+
+> Interpretasi: Sebagai baseline model, performanya masih jauh di bawah Random Forest. Terlihat precision rendah pada kelas minoritas (1).
+
+### 🔍 ROC Curve Comparison
+
+ROC Curve digunakan untuk mengevaluasi kemampuan model dalam membedakan antara kelas positif dan negatif. Semakin luas area di bawah kurva (AUC), semakin baik performa model.
+
+![image](https://github.com/user-attachments/assets/bff4ea3f-301b-4e4c-819a-4965b96bea39)
+
+Berdasarkan grafik di atas:
+- **Random Forest** memiliki AUC = 1.00 → menunjukkan kinerja sangat baik.
+- **Logistic Regression** memiliki AUC = 0.76 → performa cukup baik, tetapi masih kalah dibandingkan Random Forest.
+
+### 🔁 Cross Validation
+Untuk mengukur generalisasi model, dilakukan 5-fold Cross Validation:
+| Model               | Mean CV Accuracy |
+| ------------------- | ---------------- |
+| Random Forest       | 0.99998          |
+| Logistic Regression | 0.69944          |
+
+> Hasil menunjukkan bahwa Random Forest memiliki generalisasi yang sangat tinggi dibanding Logistic Regression.
+
+### 🔧 Hyperparameter Tuning
+Dilakukan Grid Search untuk meningkatkan performa Random Forest dengan parameter:
+
+![image](https://github.com/user-attachments/assets/20cf2018-d9c5-494b-824a-b89765e9a5f8)
+
+- Best Parameters:
+
+![image](https://github.com/user-attachments/assets/6b8713a1-5b8b-4d8a-8a22-422dd2fbdbeb)
+
+- Best CV Score: 1.00
+
+### 🏆 Model Terbaik: Random Forest Classifier
+Dipilih berdasarkan:
+- Skor evaluasi tertinggi (baik pada training, testing, maupun cross-validation)
+- Kemampuan dalam menangani fitur yang kompleks
+- Skor ROC-AUC dan F1-score sempurna
+
+### 📊 Feature Importance (Top 10)
+1. Interest_rate_spread     (0.35)
+2. Upfront_charges          (0.27)
+3. rate_of_interest         (0.23)
+4. property_value           (0.03)
+5. credit_type              (0.02)
+6. LTV                      (0.02)
+7. dtir1                    (0.02)
+8. submission_of_application
+9. co-applicant_credit_type
+10. Neg_ammortization
+
+  
 ---
 
 Dokumen ini mencerminkan seluruh tahapan proyek machine learning dari pemahaman bisnis hingga evaluasi model.
